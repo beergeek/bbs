@@ -31,4 +31,8 @@ class bbs (
 ) {
 
   contain bbs::install
+  contain bbs::config
+  contain bbs::service
+
+  Class['bbs::install'] -> Class['bbs::config'] -> Class['bbs::service']
 }

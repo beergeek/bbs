@@ -13,14 +13,14 @@ class bbs::config {
   }
 
   if $facts['os']['name'] == 'Amazon' and $facts['os']['release']['major'] == '4' {
-    $init_file = 'stash.systemd.epp'
-    $script_path = '/etc/systemd/system/stash.service'
+    $init_file = 'atlbitbucket.systemd.epp'
+    $script_path = '/etc/systemd/system/atlbitbucket.service'
   } elsif $facts['os']['release']['major'] == '6' {
-      $init_file = 'stash.init.pp'
-      $script_path = '/etc/init.d/stash'
+      $init_file = 'atlbitbucket.init.pp'
+      $script_path = '/etc/init.d/altbitbucket'
   } elsif $facts['os']['release']['major'] == '7' {
-    $init_file = 'stash.systemd.epp'
-    $script_path = '/etc/systemd/system/stash.service'
+    $init_file = 'atlbitbucket.systemd.epp'
+    $script_path = '/etc/systemd/system/atlbitbucket.service'
   } else {
     fail("You OS version is either far too old or far too bleeding edge: ${facts['os']['name']} ${facts['os']['release']['major']}")
   }
@@ -41,7 +41,7 @@ class bbs::config {
   }
 
   # Configure the home/data/app directory for Bamboo
-  file_line { 'bamboo_home_dir':
+  file_line { 'bbs_home_dir':
     ensure => present,
     path   => "${bbs::bbs_install_dir}/atlassian-bitbucket-${bbs::version}/bin/set-bitbucket-home.sh",
     line   => "  BITBUCKET_HOME=${bbs::bbs_data_dir}",
@@ -61,8 +61,9 @@ class bbs::config {
     path    => $script_path,
     mode    => '0744',
     content => epp("bbs/${init_file}", {
-      bamboo_user        => $bbs::bbs_user,
-      bamboo_install_dir => "${bbs::bbs_install_dir}/current",
+      bbs_user        => $bbs::bbs_user,
+      bbs_install_dir => "${bbs::bbs_install_dir}/current",
+      bbs_data_dir    => $bbs::bbs_data_dir,
     }),
   }
 
@@ -139,13 +140,13 @@ class bbs::config {
     }
   }
 
-  file { 'java_args':
-    ensure  => file,
-    path    => "${bbs::bbs_install_dir}/atlassian-bamboo-${bbs::version}/bin/setenv.sh",
-    content => epp('bamboo/setenv.sh.epp', {
-      java_args => $_java_args,
-      java_xms  => $bbs::jvm_xms,
-      java_xmx  => $bbs::jvm_xmx,
-    })
-  }
+  #file { 'java_args':
+  #  ensure  => file,
+  #  path    => "${bbs::bbs_install_dir}/atlassian-bamboo-${bbs::version}/bin/setenv.sh",
+  #  content => epp('bamboo/setenv.sh.epp', {
+  #    java_args => $_java_args,
+  #    java_xms  => $bbs::jvm_xms,
+  #    java_xmx  => $bbs::jvm_xmx,
+  #  })
+  #}
 }

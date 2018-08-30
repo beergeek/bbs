@@ -51,22 +51,22 @@ describe 'bbs' do
       end
 
       it do
-        is_expected.to contain_archive('/tmp/atlassian-bbs-6.6.1.tar.gz').with(
+        is_expected.to contain_archive('/tmp/atlassian-bitbucket-5.13.1.tar.gz').with(
           'ensure'        => 'present',
           'extract'       => true,
-          'extract_path'  => '/opt/atlassian/bbs',
-          'source'        => 'https://product-downloads.atlassian.com/software/bbs/downloads/atlassian-bbs-6.6.1.tar.gz',
-          'creates'       => '/opt/atlassian/bbs/atlassian-bbs-6.6.1',
+          'extract_path'  => '/opt/atlassian/stash',
+          'source'        => 'https://downloads.atlassian.com/software/stash/downloads/atlassian-bitbucket-5.13.1.tar.gz',
+          'creates'       => '/opt/atlassian/stash/atlassian-bitbucket-5.13.1',
           'cleanup'       => true,
           'user'          => 'atlbitbucket',
           'group'         => 'atlbitbucket',
-        ).that_requires('File[/opt/atlassian/bbs]')
+        ).that_requires('File[/opt/atlassian/stash]')
       end
 
       it do
-        is_expected.to contain_file('/opt/atlassian/bbs/current').with(
+        is_expected.to contain_file('/opt/atlassian/stash/current').with(
           'ensure'  => 'link',
-          'target'  => '/opt/atlassian/bbs/atlassian-bbs-6.6.1',
+          'target'  => '/opt/atlassian/stash/atlassian-bitbucket-5.13.1',
         )
       end
     end
@@ -75,36 +75,36 @@ describe 'bbs' do
       it do
         is_expected.to contain_file_line('bbs_home_dir').with(
           'ensure'  => 'present',
-          'path'    => '/opt/atlassian/bbs/atlassian-stash-5.13.1/atlassian-bbs/WEB-INF/classes/bbs-init.properties',
-          'line'    => 'bbs.home=/var/atlassian/application-data/stash',
+          'path'    => '/opt/atlassian/stash/atlassian-bitbucket-5.13.1/bin/set-bitbucket-home.sh',
+          'line'    => '  BITBUCKET_HOME=/var/atlassian/application-data/stash',
         )
       end
 
-      it do
-        is_expected.to contain_file('base_config').with(
-          'ensure'  => 'file',
-          'owner'   => 'bbs',
-          'group'   => 'bbs',
-          'mode'    => '0644',
-          'source'  => 'puppet:///modules/bbs/stash.cfg.xml',
-          'replace' => false,
-        )
-      end
+      #it do
+      #  is_expected.to contain_file('base_config').with(
+      #    'ensure'  => 'file',
+      #    'owner'   => 'bbs',
+      #    'group'   => 'bbs',
+      #    'mode'    => '0644',
+      #    'source'  => 'puppet:///modules/bbs/stash.cfg.xml',
+      #    'replace' => false,
+      #  )
+      #end
 
       it do
         is_expected.to contain_file('init_script').with(
           'ensure' => 'file',
-          'path'   => '/etc/systemd/system/bbs.service',
-          'owner'  => 'bbs',
-          'group'  => 'bbs',
+          'path'   => '/etc/systemd/system/altbitbucket.service',
+          'owner'  => 'atlbitbucket',
+          'group'  => 'atlbitbucket',
           'mode'   => '0744',
-        ).with_content(/User=bbs\nExecStart=\/opt\/atlassian\/bbs\/current\/bin\/start-bbs.sh\nExecStop=\/opt\/atlassian\/bbs\/current\/bin\/stop-bbs.sh/)
+        ).with_content(/User=atlbitbucket\nExecStart=\/opt\/atlassian\/stash\/current\/bin\/start-bitbucket.sh\nExecStop=\/opt\/atlassian\/bbs\/current\/bin\/stop-bitbucket.sh/)
       end
     end
 
     describe 'bbs::service' do
       it do
-        is_expected.to contain_service('bbs').with(
+        is_expected.to contain_service('atlbitbucket').with(
           'ensure' => 'running',
           'enable' => true,
         )
