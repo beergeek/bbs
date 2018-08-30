@@ -9,7 +9,7 @@ class bbs (
   Bbs::Memory             $jvm_xms               = '512m',
   Bbs::Memory             $jvm_xmx               = '1024m',
   Bbs::Pathurl            $mysql_driver_source   = 'https://dev.mysql.com/get/Downloads/Connector-J',
-  Bbs::Pathurl            $source_location       = 'https://product-downloads.atlassian.com/software/stash/downloads',
+  Bbs::Pathurl            $source_location       = 'https://downloads.atlassian.com/software/stash/downloads',
   Boolean                 $manage_db_settings    = false,
   Boolean                 $manage_grp            = true,
   Boolean                 $manage_user           = true,
@@ -30,5 +30,5 @@ class bbs (
   String                  $version               = '5.13.1',
 ) {
 
-  
+  contain bbs::install
 }
