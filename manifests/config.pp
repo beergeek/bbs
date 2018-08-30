@@ -45,7 +45,7 @@ class bbs::config {
     ensure => present,
     path   => "${bbs::bbs_install_dir}/atlassian-bitbucket-${bbs::version}/bin/set-bitbucket-home.sh",
     line   => "  BITBUCKET_HOME=${bbs::bbs_data_dir}",
-    match  => "\s*BITBUCKET_HOME=",
+    match  => "    BITBUCKET_HOME=",
   }
 
   #file { 'base_config':
