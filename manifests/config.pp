@@ -41,11 +41,10 @@ class bbs::config {
   }
 
   # Configure the home/data/app directory for Bamboo
-  file_line { 'bbs_home_dir':
-    ensure => present,
-    path   => "${bbs::bbs_install_dir}/atlassian-bitbucket-${bbs::version}/bin/set-bitbucket-home.sh",
-    line   => "  BITBUCKET_HOME=${bbs::bbs_data_dir}",
-    match  => "\s{4}BITBUCKET_HOME=",
+  file { 'bbs_home_dir':
+    ensure  => file,
+    path    => "${bbs::bbs_install_dir}/atlassian-bitbucket-${bbs::version}/bin/set-bitbucket-home.sh",
+    content => "BITBUCKET_HOME=${bbs::bbs_data_dir}\nexport BITBUCKET_HOME",
   }
 
   #file { 'base_config':

@@ -73,10 +73,10 @@ describe 'bbs' do
 
     describe 'bbs::config' do
       it do
-        is_expected.to contain_file_line('bbs_home_dir').with(
+        is_expected.to contain_file('bbs_home_dir').with(
           'ensure'  => 'present',
           'path'    => '/opt/atlassian/stash/atlassian-bitbucket-5.13.1/bin/set-bitbucket-home.sh',
-          'line'    => '  BITBUCKET_HOME=/var/atlassian/application-data/stash',
+          'content'    => 'BITBUCKET_HOME=/var/atlassian/application-data/stash\nexport BITBUCKET_HOME',
         )
       end
 
