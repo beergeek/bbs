@@ -39,7 +39,7 @@ class bbs::install () {
 
   file { "${bbs::bbs_install_dir}/current":
     ensure => link,
-    target => "${bbs::bbs_install_dir}/atlassian-bbs-${bbs::version}",
+    target => "${bbs::bbs_install_dir}/atlassian-bitbucket-${bbs::version}",
   }
 
 }
