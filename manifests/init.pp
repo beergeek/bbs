@@ -11,6 +11,7 @@ class bbs (
   Bbs::Memory             $jvm_xmx               = '1024m',
   Bbs::Pathurl            $mysql_driver_source   = 'https://dev.mysql.com/get/Downloads/Connector-J',
   Bbs::Pathurl            $source_location       = 'https://downloads.atlassian.com/software/stash/downloads',
+  Boolean                 $https                 = true,
   Boolean                 $manage_db_settings    = false,
   Boolean                 $manage_grp            = true,
   Boolean                 $manage_user           = true,
