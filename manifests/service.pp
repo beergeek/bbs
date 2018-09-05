@@ -1,6 +1,6 @@
 class bbs::service {
 
-  service { 'altbitbucket':
+  service { 'atlbitbucket':
     ensure => running,
     enable => true,
   }
