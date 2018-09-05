@@ -17,7 +17,7 @@ class bbs::config {
     $script_path = '/etc/systemd/system/atlbitbucket.service'
   } elsif $facts['os']['release']['major'] == '6' {
       $init_file = 'atlbitbucket.init.pp'
-      $script_path = '/etc/init.d/altbitbucket'
+      $script_path = '/etc/init.d/atlbitbucket'
   } elsif $facts['os']['release']['major'] == '7' {
     $init_file = 'atlbitbucket.systemd.epp'
     $script_path = '/etc/systemd/system/atlbitbucket.service'
@@ -61,7 +61,7 @@ class bbs::config {
     mode    => '0744',
     content => epp("bbs/${init_file}", {
       bbs_user        => $bbs::bbs_user,
-      bbs_install_dir => "${bbs::bbs_install_dir}/current",
+      bbs_install_dir => $bbs::bbs_install_dir,
       bbs_data_dir    => $bbs::bbs_data_dir,
     }),
   }
