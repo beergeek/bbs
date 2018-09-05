@@ -5,6 +5,7 @@
 # @example
 #   include bbs
 class bbs (
+  Stdlib::Absolutepath    $java_home,
   Bbs::Db_type            $db_type               = 'postgresql',
   Bbs::Memory             $jvm_xms               = '512m',
   Bbs::Memory             $jvm_xmx               = '1024m',

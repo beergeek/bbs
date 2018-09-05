@@ -47,6 +47,15 @@ class bbs::config {
     content => "BITBUCKET_HOME=${bbs::bbs_data_dir}\nexport BITBUCKET_HOME",
   }
 
+  # JRE_HOME
+  file { 'bbs_jre_home':
+    ensure  => file,
+    path    => "${bbs::bbs_install_dir}/atlassian-bitbucket-${bbs::version}/bin/set-jre-home.sh",
+    content => epp('bbs/set-jre-home.sh.epp', {
+      jre_home => $bbs::java_home,
+    }),
+  }
+
   #file { 'base_config':
   #  ensure  => file,
   #  path    => "${bbs::bbs_data_dir}/stash.cfg.xml",

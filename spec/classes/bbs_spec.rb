@@ -10,6 +10,11 @@ describe 'bbs' do
   end
 
   context 'With defaults' do
+    let :params do
+      {
+        java_home: '/usr/java/jdk1.8.0_131/jre',
+      }
+    end
     it do
       is_expected.to contain_class('bbs::install')
       is_expected.to contain_class('bbs::config')
@@ -80,6 +85,14 @@ describe 'bbs' do
         )
       end
 
+      it do
+        is_expected.to contain_file('bbs_jre_home').with(
+          'ensure'  => 'file',
+          'path'    => '/opt/atlassian/stash/atlassian-bitbucket-5.13.1/bin/set-jre-home.sh',
+          'content' => 'JRE_HOME=/usr/java/jdk1.8.0_131/jre',
+        )
+      end
+
       #it do
       #  is_expected.to contain_file('base_config').with(
       #    'ensure'  => 'file',
@@ -115,6 +128,7 @@ describe 'bbs' do
   context 'bbs with MySQL database' do
     let :params do
       {
+        java_home: '/usr/java/jdk1.8.0_131/jre',
         manage_db_settings: true,
         db_type: 'mysql',
         db_host: 'mysql0.puppet.vm',
