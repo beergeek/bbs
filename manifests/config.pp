@@ -25,19 +25,28 @@ class bbs::config {
     fail("You OS version is either far too old or far too bleeding edge: ${facts['os']['name']} ${facts['os']['release']['major']}")
   }
 
+  # Determine if port is supplied, if not assume default port for database type
+  if $bbs::db_port == undef or empty($bbs::db_port) {
+    if $bbs::db_type == 'mysql' {
+      $_db_port = '3306'
+    } else {
+      $_db_port = '5432'
+    }
+  } else {
+    $_db_port = $bbs::db_port
+  }
+
   if $bbs::db_type == 'mysql' {
     # If RHEL7 it uses MariaDB, which is not supported, but we can skip the check
     # -Dbitbucket.upgrade.fail.if.mysql.unsupported=false
     # Set db connection data
     $_java_args = "${bbs::java_args} -Dbitbucket.upgrade.fail.if.mysql.unsupported=false"
     $_db_driver = 'com.mysql.jdbc.Driver'
-    $_db_hibernate = 'org.hibernate.dialect.MySQL5InnoDBDialect'
-    $_db_url = "jdbc:mysql://${bbs::db_host}/${bbs::db_name}?autoReconnect=true"
+    $_db_url = "jdbc:mysql://${bbs::db_host}:{$_db_port}/${bbs::db_name}?characterEncoding=utf8&useUnicode=true"
   } else {
     $_java_args = $bbs::java_args
-    $_db_driver = 'com.mysql.jdbc.Driver'
-    $_db_hibernate = 'org.hibernate.dialect.PostgreSQL82Dialect'
-    $_db_url = "jdbc:postgresql://${bbs::db_host}/${bbs::db_name}?autoReconnect=true"
+    $_db_driver = 'com.psql.jdbc.Driver'
+    $_db_url = "jdbc:postgresql://${bbs::db_host}:{$_db_port}/${bbs::db_name}?characterEncoding=utf8&useUnicode=true"
   }
 
   # Configure the home/data/app directory for Bitbucket
@@ -80,15 +89,15 @@ class bbs::config {
     if $bbs::db_name == undef or $bbs::db_host == undef or $bbs::db_user == undef or $bbs::db_password == undef {
       fail('When `manage_db_settings` is true you must provide `db_name`, `db_host`, `db_user`, and `db_password`')
     }
-    # Determine if port is supplied, if not assume default port for database type
-    if $bbs::db_port == undef or empty($bbs::db_port) {
-      if $bbs::db_type == 'mysql' {
-        $_db_port = '3306'
-      } else {
-        $_db_port = '5432'
-      }
-    } else {
-      $_db_port = $bbs::db_port
+
+    file { 'db_settings':
+      ensure  => file,
+      content => epp('bbs/bitbucket.properties.epp', {
+        db_driver => $_db_driver,
+        db_url    => $_db_url,
+        db_user   => $db_user,
+        db_passwd => $db_password,
+      }),
     }
 
     # If MySQL we need the driver and set
@@ -105,47 +114,6 @@ class bbs::config {
         group           => $bbs::bbs_grp,
       }
     }
-
-    ## Database connector config
-    #file_line { 'db_driver':
-    #  ensure  => present,
-    #  line    => "    <property name=\"hibernate.connection.driver_class\">${_db_driver}</property>",
-    #  match   => '^( |\t)*<property name\="hibernate.connection.driver_class">',
-    #  after   => '^( |\t)*<property name\="bitbucket.jms.broker.uri">',
-    #  require => File['base_config'],
-    #}
-#
-    #file_line { 'db_password':
-    #  ensure  => present,
-    #  line    => "    <property name=\"hibernate.connection.password\">${bbs::db_password}</property>",
-    #  match   => '^( |\t)*<property name\="hibernate.connection.password">',
-    #  after   => '^( |\t)*<property name\="hibernate.connection.driver_class">',
-    #  require => File_line['db_driver'],
-    #}
-#
-    #file_line { 'db_url':
-    #  ensure  => present,
-    #  line    => "    <property name=\"hibernate.connection.url\">${_db_url}</property>",
-    #  match   => '^( |\t)*<property name\="hibernate.connection.url">',
-    #  after   => '^( |\t)*<property name\="hibernate.connection.password">',
-    #  require => File_line['db_password'],
-    #}
-#
-    #file_line { 'db_user':
-    #  ensure  => present,
-    #  line    => "    <property name=\"hibernate.connection.username\">${bbs::db_user}</property>",
-    #  match   => '^( |\t)*<property name\="hibernate.connection.username">',
-    #  after   => '^( |\t)*<property name\="hibernate.connection.url">',
-    #  require => File_line['db_url'],
-    #}
-#
-    #file_line { 'db_dialect':
-    #  ensure  => present,
-    #  line    => "    <property name=\"hibernate.dialect\">${_db_hibernate}</property>",
-    #  match   => '^( |\t)*<property name\="hibernate.dialect">',
-    #  after   => '^( |\t)*<property name\="hibernate.connection.username">',
-    #  require => File_line['db_user'],
-    #}
   }
 
   #file { 'java_args':
