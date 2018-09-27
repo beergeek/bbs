@@ -36,5 +36,5 @@ class bbs (
   contain bbs::config
   contain bbs::service
 
-  Class['bbs::install'] -> Class['bbs::config'] -> Class['bbs::service']
+  Class['bbs::install'] -> Class['bbs::config'] ~> Class['bbs::service']
 }
