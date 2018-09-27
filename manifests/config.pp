@@ -106,46 +106,46 @@ class bbs::config {
       }
     }
 
-    # Database connector config
-    file_line { 'db_driver':
-      ensure  => present,
-      line    => "    <property name=\"hibernate.connection.driver_class\">${_db_driver}</property>",
-      match   => '^( |\t)*<property name\="hibernate.connection.driver_class">',
-      after   => '^( |\t)*<property name\="bamboo.jms.broker.uri">',
-      require => File['base_config'],
-    }
-
-    file_line { 'db_password':
-      ensure  => present,
-      line    => "    <property name=\"hibernate.connection.password\">${bbs::db_password}</property>",
-      match   => '^( |\t)*<property name\="hibernate.connection.password">',
-      after   => '^( |\t)*<property name\="hibernate.connection.driver_class">',
-      require => File_line['db_driver'],
-    }
-
-    file_line { 'db_url':
-      ensure  => present,
-      line    => "    <property name=\"hibernate.connection.url\">${_db_url}</property>",
-      match   => '^( |\t)*<property name\="hibernate.connection.url">',
-      after   => '^( |\t)*<property name\="hibernate.connection.password">',
-      require => File_line['db_password'],
-    }
-
-    file_line { 'db_user':
-      ensure  => present,
-      line    => "    <property name=\"hibernate.connection.username\">${bbs::db_user}</property>",
-      match   => '^( |\t)*<property name\="hibernate.connection.username">',
-      after   => '^( |\t)*<property name\="hibernate.connection.url">',
-      require => File_line['db_url'],
-    }
-
-    file_line { 'db_dialect':
-      ensure  => present,
-      line    => "    <property name=\"hibernate.dialect\">${_db_hibernate}</property>",
-      match   => '^( |\t)*<property name\="hibernate.dialect">',
-      after   => '^( |\t)*<property name\="hibernate.connection.username">',
-      require => File_line['db_user'],
-    }
+    ## Database connector config
+    #file_line { 'db_driver':
+    #  ensure  => present,
+    #  line    => "    <property name=\"hibernate.connection.driver_class\">${_db_driver}</property>",
+    #  match   => '^( |\t)*<property name\="hibernate.connection.driver_class">',
+    #  after   => '^( |\t)*<property name\="bamboo.jms.broker.uri">',
+    #  require => File['base_config'],
+    #}
+#
+    #file_line { 'db_password':
+    #  ensure  => present,
+    #  line    => "    <property name=\"hibernate.connection.password\">${bbs::db_password}</property>",
+    #  match   => '^( |\t)*<property name\="hibernate.connection.password">',
+    #  after   => '^( |\t)*<property name\="hibernate.connection.driver_class">',
+    #  require => File_line['db_driver'],
+    #}
+#
+    #file_line { 'db_url':
+    #  ensure  => present,
+    #  line    => "    <property name=\"hibernate.connection.url\">${_db_url}</property>",
+    #  match   => '^( |\t)*<property name\="hibernate.connection.url">',
+    #  after   => '^( |\t)*<property name\="hibernate.connection.password">',
+    #  require => File_line['db_password'],
+    #}
+#
+    #file_line { 'db_user':
+    #  ensure  => present,
+    #  line    => "    <property name=\"hibernate.connection.username\">${bbs::db_user}</property>",
+    #  match   => '^( |\t)*<property name\="hibernate.connection.username">',
+    #  after   => '^( |\t)*<property name\="hibernate.connection.url">',
+    #  require => File_line['db_url'],
+    #}
+#
+    #file_line { 'db_dialect':
+    #  ensure  => present,
+    #  line    => "    <property name=\"hibernate.dialect\">${_db_hibernate}</property>",
+    #  match   => '^( |\t)*<property name\="hibernate.dialect">',
+    #  after   => '^( |\t)*<property name\="hibernate.connection.username">',
+    #  require => File_line['db_user'],
+    #}
   }
 
   #file { 'java_args':
