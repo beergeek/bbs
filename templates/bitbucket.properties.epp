@@ -1,7 +1,3 @@
-#>*******************************************************
-#> Migrated to database at jdbc:mysql://localhost:3306/bbsdb?characterEncoding=utf8&useUnicode=true
-#> Updated on 2018-09-27T02:49:49.735Z
-#>*******************************************************
 jdbc.driver=<%= $db_driver %>
 jdbc.url=<%= $db_url %>
 jdbc.user=<%= $db_user %>
