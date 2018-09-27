@@ -102,6 +102,7 @@ class bbs::config {
         keystore_path         => $bbs::keystore_path,
         keystore_password     => $bbs::keystore_password,
         keystore_key_password => $bbs::keystore_key_password,
+        key_alias             => $bbs::key_alias,
       }),
     }
 

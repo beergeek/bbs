@@ -8,4 +8,7 @@ server.ssl.enabled=true
 server.ssl.key-store=<%= $keystore_path %>
 server.ssl.key-store-password=<%= $keystore_password %>
 server.ssl.key-password=<%= $keystore_key_password %>
+<% if $key_alias { -%>
+server.ssl.key-alias=<%= $key_alias %>
+<% } -%>
 <% } -%>
