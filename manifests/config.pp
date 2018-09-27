@@ -92,6 +92,7 @@ class bbs::config {
 
     file { 'db_settings':
       ensure  => file,
+      path    => "${bbs::bbs_data_dir}/shared/bitbucket.properties",
       content => epp('bbs/bitbucket.properties.epp', {
         db_driver             => $_db_driver,
         db_url                => $_db_url,
