@@ -25,8 +25,8 @@ class bbs (
   Optional[String]        $mysql_driver_pkg      = 'mysql-connector-java-5.1.46.tar.gz',
   # $mysql_driver_jar_name must come after $mysql_driver_pkg
   Optional[String]        $mysql_driver_jar_name = "${basename($mysql_driver_pkg, '.tar.gz')}.jar",
-  Stdlib::Absolutepath    $bbs_data_dir          = '/var/atlassian/application-data/stash',
-  Stdlib::Absolutepath    $bbs_install_dir       = '/opt/atlassian/stash',
+  Stdlib::Absolutepath    $bbs_data_dir          = '/var/atlassian/application-data/bitbucket',
+  Stdlib::Absolutepath    $bbs_install_dir       = '/opt/atlassian/bitbucket',
   String                  $bbs_grp               = 'atlbitbucket',
   String                  $bbs_user              = 'atlbitbucket',
   String                  $version               = '5.13.1',

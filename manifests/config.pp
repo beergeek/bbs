@@ -9,7 +9,7 @@ class bbs::config {
   }
 
   File_line {
-    path    => "${bbs::bbs_data_dir}/bamboo.cfg.xml",
+    path    => "${bbs::bbs_data_dir}/bitbucket.cfg.xml",
   }
 
   if $facts['os']['name'] == 'Amazon' and $facts['os']['release']['major'] == '4' {
@@ -27,9 +27,9 @@ class bbs::config {
 
   if $bbs::db_type == 'mysql' {
     # If RHEL7 it uses MariaDB, which is not supported, but we can skip the check
-    # -Dbamboo.upgrade.fail.if.mysql.unsupported=false
+    # -Dbitbucket.upgrade.fail.if.mysql.unsupported=false
     # Set db connection data
-    $_java_args = "${bbs::java_args} -Dbamboo.upgrade.fail.if.mysql.unsupported=false"
+    $_java_args = "${bbs::java_args} -Dbitbucket.upgrade.fail.if.mysql.unsupported=false"
     $_db_driver = 'com.mysql.jdbc.Driver'
     $_db_hibernate = 'org.hibernate.dialect.MySQL5InnoDBDialect'
     $_db_url = "jdbc:mysql://${bbs::db_host}/${bbs::db_name}?autoReconnect=true"
@@ -40,7 +40,7 @@ class bbs::config {
     $_db_url = "jdbc:postgresql://${bbs::db_host}/${bbs::db_name}?autoReconnect=true"
   }
 
-  # Configure the home/data/app directory for Bamboo
+  # Configure the home/data/app directory for Bitbucket
   file { 'bbs_home_dir':
     ensure  => file,
     path    => "${bbs::bbs_install_dir}/atlassian-bitbucket-${bbs::version}/bin/set-bitbucket-home.sh",
@@ -97,9 +97,9 @@ class bbs::config {
         ensure          => present,
         extract         => true,
         extract_command => "tar -zxf %s --strip-components 1 --exclude='lib*' */${bbs::mysql_driver_jar_name}",
-        extract_path    => "${bbs::bbs_install_dir}/atlassian-bamboo-${bbs::version}/lib",
+        extract_path    => "${bbs::bbs_install_dir}/atlassian-bitbucket-${bbs::version}/lib",
         source          => "${bbs::mysql_driver_source}/${bbs::mysql_driver_pkg}",
-        creates         => "${bbs::bbs_install_dir}/atlassian-bamboo-${bbs::version}/lib/${bbs::mysql_driver_jar_name}",
+        creates         => "${bbs::bbs_install_dir}/atlassian-bitbucket-${bbs::version}/lib/${bbs::mysql_driver_jar_name}",
         cleanup         => true,
         user            => $bbs::bbs_user,
         group           => $bbs::bbs_grp,
@@ -111,7 +111,7 @@ class bbs::config {
     #  ensure  => present,
     #  line    => "    <property name=\"hibernate.connection.driver_class\">${_db_driver}</property>",
     #  match   => '^( |\t)*<property name\="hibernate.connection.driver_class">',
-    #  after   => '^( |\t)*<property name\="bamboo.jms.broker.uri">',
+    #  after   => '^( |\t)*<property name\="bitbucket.jms.broker.uri">',
     #  require => File['base_config'],
     #}
 #
@@ -150,8 +150,8 @@ class bbs::config {
 
   #file { 'java_args':
   #  ensure  => file,
-  #  path    => "${bbs::bbs_install_dir}/atlassian-bamboo-${bbs::version}/bin/setenv.sh",
-  #  content => epp('bamboo/setenv.sh.epp', {
+  #  path    => "${bbs::bbs_install_dir}/atlassian-bitbucket-${bbs::version}/bin/setenv.sh",
+  #  content => epp('bitbucket/setenv.sh.epp', {
   #    java_args => $_java_args,
   #    java_xms  => $bbs::jvm_xms,
   #    java_xmx  => $bbs::jvm_xmx,
