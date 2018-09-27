@@ -42,11 +42,11 @@ class bbs::config {
     # Set db connection data
     $_java_args = "${bbs::java_args} -Dbitbucket.upgrade.fail.if.mysql.unsupported=false"
     $_db_driver = 'com.mysql.jdbc.Driver'
-    $_db_url = "jdbc:mysql://${bbs::db_host}:{$_db_port}/${bbs::db_name}?characterEncoding=utf8&useUnicode=true"
+    $_db_url = "jdbc:mysql://${bbs::db_host}:${_db_port}/${bbs::db_name}?characterEncoding=utf8&useUnicode=true"
   } else {
     $_java_args = $bbs::java_args
     $_db_driver = 'com.psql.jdbc.Driver'
-    $_db_url = "jdbc:postgresql://${bbs::db_host}:{$_db_port}/${bbs::db_name}?characterEncoding=utf8&useUnicode=true"
+    $_db_url = "jdbc:postgresql://${bbs::db_host}:${_db_port}/${bbs::db_name}?characterEncoding=utf8&useUnicode=true"
   }
 
   # Configure the home/data/app directory for Bitbucket
