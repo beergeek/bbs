@@ -93,10 +93,14 @@ class bbs::config {
     file { 'db_settings':
       ensure  => file,
       content => epp('bbs/bitbucket.properties.epp', {
-        db_driver => $_db_driver,
-        db_url    => $_db_url,
-        db_user   => $db_user,
-        db_passwd => $db_password,
+        db_driver             => $_db_driver,
+        db_url                => $_db_url,
+        db_user               => $bbs::db_user,
+        db_passwd             => $bbs::db_password,
+        https                 => $bbs::https,
+        keystore_path         => $bbs::keystore_path,
+        keystore_password     => $bbs::keystore_password,
+        keystore_key_password => $bbs::keystore_key_password,
       }),
     }
 

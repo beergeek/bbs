@@ -2,3 +2,10 @@ jdbc.driver=<%= $db_driver %>
 jdbc.url=<%= $db_url %>
 jdbc.user=<%= $db_user %>
 jdbc.password=<%= $db_passwd %>
+<% if $https == true { -%>
+server.port=8443
+server.ssl.enabled=true
+server.ssl.key-store=<%= $keystore_path %>
+server.ssl.key-store-password=<%= $keystore_password %>
+server.ssl.key-password=<%= $keystore_key_password %>
+<% } -%>

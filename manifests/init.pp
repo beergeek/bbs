@@ -27,9 +27,12 @@ class bbs (
   Optional[String]        $mysql_driver_jar_name = "${basename($mysql_driver_pkg, '.tar.gz')}.jar",
   Stdlib::Absolutepath    $bbs_data_dir          = '/var/atlassian/application-data/bitbucket',
   Stdlib::Absolutepath    $bbs_install_dir       = '/opt/atlassian/bitbucket',
+  Stdlib::Absolutepath    $keystore_path         = "${bbs_data_dir}/bbs.jks",
   String                  $bbs_grp               = 'atlbitbucket',
   String                  $bbs_user              = 'atlbitbucket',
   String                  $version               = '5.13.1',
+  String                  $keystore_password     = 'changeit',
+  String                  $keystore_key_password = $keystore_password,
 ) {
 
   contain bbs::install
